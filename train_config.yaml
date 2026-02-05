@@ -1,0 +1,48 @@
+# Data configuration
+data:
+  train_data: "./dataset/lmdb/train"
+  valid_data: "./dataset/lmdb/validation"
+  select_data: ["train"]
+  batch_ratio: [1.0]
+  total_data_usage_ratio: 1.0  # 1.0 = use all data
+  batch_max_length: 25  # max text length
+  imgH: 64  # image height
+  imgW: 256  # image width
+  rgb: False  # False = grayscale, True = RGB
+  character: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ "  # character set
+  batch_size: 192
+  num_workers: 4
+
+# Model architecture
+model:
+  input_channel: 1  # 1 for grayscale, 3 for RGB
+  output_channel: 512
+  hidden_size: 256
+  Transformation: "TPS"  # None | TPS
+  FeatureExtraction: "ResNet"  # VGG | RCNN | ResNet
+  SequenceModeling: "BiLSTM"  # None | BiLSTM
+  Prediction: "Attn"  # CTC | Attn
+
+# Training configuration
+training:
+  num_iter: 300000  # total training iterations
+  batch_size: 192
+  valInterval: 2000  # validation setiap 2000 iterations
+  saved_model: "./saved_models"  # directory untuk save checkpoints
+  FT: False  # False = train from scratch, True = finetune
+  continue_model: ""  # path to pretrained model (if FT=True)
+  adam: False  # False = Adadelta, True = Adam
+  lr: 1.0  # learning rate
+  beta1: 0.9  # for Adam
+  rho: 0.95  # for Adadelta
+  eps: 1e-8
+  grad_clip: 5  # gradient clipping
+  num_gpu: 1  # number of GPUs
+
+# Augmentation
+augmentation:
+  use_augmentation: True
+  rotation: 5  # random rotation degree
+  scale_factor: 0.1  # random scale
+  blur_prob: 0.3
+  noise_prob: 0.3
