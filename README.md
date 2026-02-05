@@ -7,23 +7,29 @@ Contoh untuk berbagai kasus:
 
 Angka saja (digit recognition):
 
-character = "0123456789"
+- character = "0123456789"
+
 Alphanumeric + basic punctuation:
 
-character = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.,- "
+- character = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!.,- "
+
 Indonesian text (dengan huruf khusus):
 
-character = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ àáèéìíòóùú"
+- character = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ àáèéìíòóùú"
+
 Full ASCII:
 
+```
 import string
 character = string.printable[:-5]  # exclude \t\n\r\v\f
+```
+
 Tips Character Set:
 
-Include SEMUA karakter yang muncul di dataset
-Jangan include karakter yang tidak ada di dataset
-Case sensitive: 'A' != 'a'
-Space character penting untuk text dengan spasi
+- Include SEMUA karakter yang muncul di dataset
+- Jangan include karakter yang tidak ada di dataset
+- Case sensitive: 'A' != 'a'
+- Space character penting untuk text dengan spasi
 
 
 ## Training dari Scratch
@@ -50,18 +56,18 @@ Training model baru dari nol (tanpa pretrained weights):
 
 Penjelasan parameter:
 
---train_data: Path ke LMDB training dataset
---valid_data: Path ke LMDB validation dataset
---Transformation TPS: Gunakan Thin Plate Spline untuk handle distortion
---FeatureExtraction ResNet: Gunakan ResNet untuk feature extraction
---SequenceModeling BiLSTM: Bidirectional LSTM untuk sequence modeling
---Prediction Attn: Attention mechanism untuk prediction
---batch_size 192: Batch size (reduce jika OOM)
---num_iter 300000: Total training iterations
---valInterval 2000: Validasi setiap 2000 iterations
---lr 1.0: Learning rate (untuk Adadelta)
---workers 4: Jumlah data loader workers
---rgb False: Grayscale images
+- --train_data: Path ke LMDB training dataset
+- --valid_data: Path ke LMDB validation dataset
+- --Transformation TPS: Gunakan Thin Plate Spline untuk handle distortion
+- --FeatureExtraction ResNet: Gunakan ResNet untuk feature extraction
+- --SequenceModeling BiLSTM: Bidirectional LSTM untuk sequence modeling
+- --Prediction Attn: Attention mechanism untuk prediction
+- --batch_size 192: Batch size (reduce jika OOM)
+- --num_iter 300000: Total training iterations
+- --valInterval 2000: Validasi setiap 2000 iterations
+- --lr 1.0: Learning rate (untuk Adadelta)
+- --workers 4: Jumlah data loader workers
+- --rgb False: Grayscale images
 
 
 ## Finetuning dari Pretrained Model
@@ -69,13 +75,17 @@ Finetuning dari model pretrained EasyOCR untuk accelerate training:
 
 Download pretrained model:
 
-Latin alphabet model (English)
-```wget https://github.com/JaidedAI/EasyOCR/releases/download/v1.3/latin_g2.zip
-unzip latin_g2.zip```
+- Latin alphabet model (English)
+```
+wget https://github.com/JaidedAI/EasyOCR/releases/download/v1.3/latin_g2.zip
+unzip latin_g2.zip
+```
 
-Atau model bahasa lain
+- Atau model bahasa lain
 Indonesian
-```wget https://github.com/JaidedAI/EasyOCR/releases/download/v1.3/indonesian_g2.zip```
+```
+wget https://github.com/JaidedAI/EasyOCR/releases/download/v1.3/indonesian_g2.zip
+```
 
 Finetune command:
 
@@ -101,10 +111,10 @@ Finetune command:
 
 Perbedaan penting saat finetuning:
 
---saved_model latin_g2.pth: Path ke pretrained model
---FT: Flag untuk enable finetuning mode
---lr 0.0001: Learning rate LEBIH KECIL (1000x lebih kecil)
---num_iter 50000: Iterasi LEBIH SEDIKIT (6x lebih sedikit)
+- --saved_model latin_g2.pth: Path ke pretrained model
+- --FT: Flag untuk enable finetuning mode
+- --lr 0.0001: Learning rate LEBIH KECIL (1000x lebih kecil)
+- --num_iter 50000: Iterasi LEBIH SEDIKIT (6x lebih sedikit)
 
 ## Monitoring Training dengan TensorBoard
 EasyOCR otomatis log metrics ke TensorBoard. Buka di terminal baru:
@@ -114,21 +124,21 @@ Buka browser: http://localhost:6006
 
 Metrics yang perlu dimonitor:
 
-Training Loss: Harus menurun secara konsisten
+- Training Loss: Harus menurun secara konsisten
 
-Good: Smooth decrease
-Bad: Plateau atau naik
-Solution jika bad: Reduce learning rate
-Validation Accuracy: Target > 95% untuk dataset berkualitas
+- Good: Smooth decrease
+- Bad: Plateau atau naik
+- Solution jika bad: Reduce learning rate
+- Validation Accuracy: Target > 95% untuk dataset berkualitas
 
-Monitor overfitting: jika train acc naik tapi val acc turun
-Solution: Early stopping, regularization, atau augmentation
-Character Error Rate (CER): Semakin rendah semakin baik
+- Monitor overfitting: jika train acc naik tapi val acc turun
+- Solution: Early stopping, regularization, atau augmentation
+- Character Error Rate (CER): Semakin rendah semakin baik
 
-Good: < 0.05 (5% error)
-Acceptable: 0.05 - 0.15
-Bad: > 0.15
-Learning Rate Schedule: Track apakah LR sudah optimal
+- Good: < 0.05 (5% error)
+- Acceptable: 0.05 - 0.15
+- Bad: > 0.15
+- Learning Rate Schedule: Track apakah LR sudah optimal
 
 ## Testing dan Evaluasi Model
 ### Evaluasi Comprehensive pada Test Set
@@ -167,37 +177,41 @@ Top 5 worst predictions:
 ## 1. Dataset Preparation
 Rekomendasi ukuran dataset:
 
-Minimum: 1,000 samples
-Good: 5,000 - 10,000 samples
-Excellent: 50,000+ samples
+- Minimum: 1,000 samples
+- Good: 5,000 - 10,000 samples
+- Excellent: 50,000+ samples
+
 Split ratio:
 
-Training: 80%
-Validation: 10%
-Test: 10%
+- Training: 80%
+- Validation: 10%
+- Test: 10%
+
 Data quality checklist:
 
- Semua images readable dan clear
- Labels 100% accurate (audit manual)
- Diverse fonts, sizes, styles
- Various backgrounds dan lighting
- Balanced character distribution
- No duplicate images
+- Semua images readable dan clear
+- Labels 100% accurate (audit manual)
+- Diverse fonts, sizes, styles
+- Various backgrounds dan lighting
+- Balanced character distribution
+- No duplicate images
+
 ## 2. Training Strategy
 For small dataset (< 5k samples):
 
-Gunakan pretrained model + finetuning
-Heavy augmentation
-Small learning rate (1e-4 to 1e-5)
-Monitor overfitting closely
-Early stopping dengan patience=10
+- Gunakan pretrained model + finetuning
+- Heavy augmentation
+- Small learning rate (1e-4 to 1e-5)
+- Monitor overfitting closely
+- Early stopping dengan patience=10
+
 For large dataset (> 50k samples):
 
-Train from scratch OK
-Moderate augmentation
-Standard learning rate (1.0 untuk Adadelta)
-Longer training (300k iterations)
-Less prone to overfitting
+- Train from scratch OK
+- Moderate augmentation
+- Standard learning rate (1.0 untuk Adadelta)
+- Longer training (300k iterations)
+- Less prone to overfitting
 
 ### 3. Monitoring dan Checkpointing
 
@@ -229,22 +243,22 @@ if val_loss < best_val_loss:
 ### 4. Hyperparameter Tuning Priority
 Order of importance untuk tuning:
 
-Learning Rate (paling penting)
+- Learning Rate (paling penting)
 
-Start: 1.0 (Adadelta) atau 1e-3 (Adam)
-Tune dengan LR finder
-Batch Size
+- Start: 1.0 (Adadelta) atau 1e-3 (Adam)
+- Tune dengan LR finder
+- Batch Size
 
-Larger = more stable tapi butuh memory
-Typical: 64-256
-Architecture
+- Larger = more stable tapi butuh memory
+- Typical: 64-256
+- Architecture
 
-TPS + ResNet + BiLSTM + Attn (recommended)
-Experiment dengan VGG atau RCNN
-Image Size
+- TPS + ResNet + BiLSTM + Attn (recommended)
+- Experiment dengan VGG atau RCNN
+- Image Size
 
-Default: 64x256
-Larger untuk text detail lebih baik
-Augmentation Strength
+- Default: 64x256
+- Larger untuk text detail lebih baik
+- Augmentation Strength
 
-Start conservative, increase jika overfit
+- Start conservative, increase jika overfit
