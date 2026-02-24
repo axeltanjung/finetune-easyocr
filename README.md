@@ -1,4 +1,4 @@
-# Finetuning EasyOCR with Dataset Custom
+# Finetuning EasyOCR with Dataset Customs
 
 ##  Character Set Configuration
 PENTING: Sesuaikan character set dengan kebutuhan dataset Anda.
